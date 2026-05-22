@@ -10,21 +10,23 @@
 
   <style>
     :root {
-      --brand-dark: #1a1a2e;
-      --brand-mid:  #16213e;
-      --brand-accent: #06d6a0;
-      --brand-light: #f8f9fa;
-      --text-main:  #1f2937;
-      --text-gray:  #6b7280;
-      --border:     #e5e7eb;
-      --radius:     12px;
+      --brand-orange:  #F38C23;
+      --brand-orange2: #e07810;
+      --brand-teal:    #46C8D5;
+      --brand-teal2:   #2fafbd;
+      --brand-cream:   #FFFDF5;
+      --brand-yellow:  #FFF3DC;
+      --text-main:     #2d1f00;
+      --text-gray:     #7a6a50;
+      --border:        #edd9b0;
+      --radius:        14px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      background: var(--brand-light);
+      background: var(--brand-cream);
       color: var(--text-main);
       min-height: 100vh;
       padding-bottom: 40px;
@@ -32,19 +34,69 @@
 
     /* ── HEADER ── */
     .header {
-      background: linear-gradient(135deg, var(--brand-dark) 0%, var(--brand-mid) 100%);
+      background: linear-gradient(150deg, var(--brand-orange) 0%, #F5A033 100%);
       padding: 32px 24px 24px;
       text-align: center;
       color: #fff;
+      position: relative;
+      overflow: hidden;
     }
-    .header-logo { font-size: 48px; margin-bottom: 8px; }
-    .header-brand { font-size: 24px; font-weight: 800; letter-spacing: 2px; }
-    .header-sub { font-size: 13px; opacity: 0.65; margin-top: 4px; }
+    .header::before {
+      content: "";
+      position: absolute;
+      bottom: -30px; left: 50%;
+      transform: translateX(-50%);
+      width: 120%;
+      height: 60px;
+      background: var(--brand-cream);
+      border-radius: 50%;
+    }
 
-    /* User Card (auto-filled) */
+    /* Logo */
+    .header-logo-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+    .logo-paw {
+      background: #fff;
+      border-radius: 50%;
+      width: 52px; height: 52px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    }
+    .logo-text-wrap { text-align: left; }
+    .header-brand {
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      color: #fff;
+      line-height: 1;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    }
+    .header-tagline {
+      font-size: 10px;
+      color: rgba(255,255,255,0.85);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+    .header-sub {
+      font-size: 13px;
+      color: rgba(255,255,255,0.9);
+      margin-top: 8px;
+      background: rgba(255,255,255,0.2);
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 20px;
+    }
+
+    /* User Card */
     .user-card {
-      background: rgba(255,255,255,0.12);
-      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.22);
+      border: 1px solid rgba(255,255,255,0.35);
       border-radius: var(--radius);
       padding: 12px 16px;
       margin: 16px 0 0;
@@ -56,29 +108,30 @@
     .user-avatar {
       width: 44px; height: 44px;
       border-radius: 50%;
-      background: rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.3);
       flex-shrink: 0;
       overflow: hidden;
       display: flex; align-items: center; justify-content: center;
       font-size: 20px;
+      border: 2px solid rgba(255,255,255,0.6);
     }
     .user-avatar img { width: 100%; height: 100%; object-fit: cover; }
-    .user-name { font-size: 15px; font-weight: 600; }
-    .user-uid  { font-size: 10px; opacity: 0.55; font-family: monospace; word-break: break-all; }
+    .user-name { font-size: 15px; font-weight: 700; color: #fff; }
+    .user-uid  { font-size: 10px; color: rgba(255,255,255,0.65); font-family: monospace; word-break: break-all; }
     .user-badge {
       margin-left: auto;
-      background: var(--brand-accent);
-      color: var(--brand-dark);
+      background: var(--brand-teal);
+      color: #fff;
       font-size: 10px;
       font-weight: 700;
-      padding: 3px 8px;
+      padding: 4px 10px;
       border-radius: 20px;
       flex-shrink: 0;
     }
 
     /* ── FORM BODY ── */
     .form-body {
-      padding: 20px 16px;
+      padding: 32px 16px 20px;
       max-width: 480px;
       margin: 0 auto;
     }
@@ -89,17 +142,28 @@
       border: 1.5px solid var(--border);
       padding: 18px;
       margin-bottom: 14px;
+      box-shadow: 0 2px 8px rgba(243,140,35,0.06);
     }
     .section-title {
-      font-size: 11px;
-      font-weight: 700;
+      font-size: 12px;
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.6px;
-      color: var(--text-gray);
-      margin-bottom: 14px;
+      letter-spacing: 0.8px;
+      color: var(--brand-orange);
+      margin-bottom: 4px;
       display: flex;
       align-items: center;
       gap: 6px;
+    }
+    .section-desc {
+      font-size: 11.5px;
+      color: var(--text-gray);
+      margin-bottom: 14px;
+      line-height: 1.5;
+      padding: 6px 10px;
+      background: var(--brand-yellow);
+      border-radius: 8px;
+      border-left: 3px solid var(--brand-orange);
     }
 
     .field { margin-bottom: 12px; }
@@ -126,18 +190,19 @@
       font-size: 14px;
       color: var(--text-main);
       background: #fafafa;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s;
       -webkit-appearance: none;
     }
     input:focus, select:focus, textarea:focus {
       outline: none;
-      border-color: var(--brand-dark);
+      border-color: var(--brand-orange);
       background: #fff;
+      box-shadow: 0 0 0 3px rgba(243,140,35,0.12);
     }
     input.auto-filled {
-      background: #f0fdf4;
-      border-color: #86efac;
-      color: #166534;
+      background: #fff8f0;
+      border-color: #f5c07a;
+      color: #a05500;
       font-family: monospace;
       font-size: 12px;
     }
@@ -148,7 +213,6 @@
       grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
-
     .platform-field label {
       display: flex;
       align-items: center;
@@ -159,22 +223,24 @@
     .btn-submit {
       width: 100%;
       padding: 16px;
-      background: var(--brand-dark);
+      background: linear-gradient(135deg, var(--brand-orange) 0%, #F5A033 100%);
       color: #fff;
       border: none;
       border-radius: var(--radius);
       font-size: 16px;
-      font-weight: 700;
+      font-weight: 800;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      transition: opacity 0.2s;
+      transition: opacity 0.2s, transform 0.1s;
       margin-top: 4px;
+      box-shadow: 0 4px 14px rgba(243,140,35,0.35);
+      letter-spacing: 0.5px;
     }
-    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
-    .btn-submit:not(:disabled):active { opacity: 0.85; }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+    .btn-submit:not(:disabled):active { opacity: 0.9; transform: scale(0.99); }
 
     /* ── SUCCESS ── */
     .success-screen {
@@ -182,9 +248,37 @@
       text-align: center;
       padding: 60px 24px;
     }
-    .success-icon { font-size: 64px; margin-bottom: 16px; }
-    .success-title { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
-    .success-sub { font-size: 14px; color: var(--text-gray); line-height: 1.6; }
+    .success-icon { font-size: 72px; margin-bottom: 16px; }
+    .success-icon-circle {
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--brand-orange), #F5A033);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 48px;
+      box-shadow: 0 6px 20px rgba(243,140,35,0.3);
+    }
+    .success-title {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: var(--brand-orange);
+    }
+    .success-sub {
+      font-size: 14px;
+      color: var(--text-gray);
+      line-height: 1.7;
+    }
+    .success-teal-bar {
+      display: inline-block;
+      background: var(--brand-teal);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 20px;
+      border-radius: 20px;
+      margin-top: 20px;
+    }
 
     /* ── LOADING ── */
     .loading-screen {
@@ -194,15 +288,19 @@
       justify-content: center;
       min-height: 100vh;
       gap: 16px;
+      background: var(--brand-cream);
     }
+    .loading-logo { font-size: 48px; animation: bounce 1s ease-in-out infinite alternate; }
+    @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-10px); } }
     .spinner {
-      width: 40px; height: 40px;
-      border: 3px solid #e5e7eb;
-      border-top-color: var(--brand-dark);
+      width: 36px; height: 36px;
+      border: 3px solid var(--brand-yellow);
+      border-top-color: var(--brand-orange);
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text { font-size: 14px; color: var(--text-gray); font-weight: 500; }
 
     .error-msg {
       background: #fef2f2;
@@ -216,16 +314,35 @@
     }
     .error-msg.show { display: block; }
 
-    /* Already registered */
     .already-badge {
-      display: inline-block;
-      background: #fef3c7;
-      color: #92400e;
-      font-size: 11px;
-      font-weight: 600;
-      padding: 3px 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--brand-yellow);
+      color: var(--brand-orange2);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 14px;
       border-radius: 20px;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
+      border: 1.5px solid var(--brand-orange);
+    }
+
+    /* Teal divider accent */
+    .teal-dot {
+      display: inline-block;
+      width: 8px; height: 8px;
+      background: var(--brand-teal);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .footer-note {
+      text-align: center;
+      font-size: 11px;
+      color: #b09878;
+      margin-top: 14px;
+      line-height: 1.6;
     }
   </style>
 </head>
@@ -233,8 +350,9 @@
 
 <!-- ── LOADING ── -->
 <div class="loading-screen" id="loadingScreen">
+  <div class="loading-logo">🐾</div>
   <div class="spinner"></div>
-  <p style="font-size:14px;color:#6b7280;">กำลังโหลด...</p>
+  <p class="loading-text">กำลังโหลด Hosttail...</p>
 </div>
 
 <!-- ── MAIN FORM ── -->
@@ -242,9 +360,14 @@
 
   <!-- Header -->
   <div class="header">
-    <div class="header-logo">🐾</div>
-    <div class="header-brand">HOSTTAIL</div>
-    <div class="header-sub">สมัครสมาชิก • Member Registration</div>
+    <div class="header-logo-wrap">
+      <div class="logo-paw">🐾</div>
+      <div class="logo-text-wrap">
+        <div class="header-brand">HOSTTAIL</div>
+        <div class="header-tagline">PET VARIETY STORE</div>
+      </div>
+    </div>
+    <div class="header-sub">🌟 สมัครสมาชิก • Member Registration</div>
 
     <div class="user-card" id="userCard">
       <div class="user-avatar" id="userAvatar">👤</div>
@@ -268,7 +391,7 @@
 
     <!-- ── SECTION 1: ข้อมูลส่วนตัว ── -->
     <div class="section">
-      <div class="section-title">📱 ข้อมูลส่วนตัว</div>
+      <div class="section-title"><span class="teal-dot"></span> ข้อมูลส่วนตัว</div>
 
       <div class="field">
         <label>LINE User ID <span class="opt">(อัตโนมัติ)</span></label>
@@ -293,7 +416,10 @@
 
     <!-- ── SECTION 2: Order IDs ── -->
     <div class="section">
-      <div class="section-title">🛒 เลขที่คำสั่งซื้อ <span style="font-weight:400;text-transform:none;">(ไม่บังคับ)</span></div>
+      <div class="section-title"><span class="teal-dot"></span> เลขที่คำสั่งซื้อ <span style="font-weight:400;text-transform:none;color:var(--text-gray);font-size:11px;">(ไม่บังคับ)</span></div>
+      <div class="section-desc">
+        📦 สำหรับยืนยันสิทธิ์เพื่อรับประกันสินค้าจากทางแบรนด์
+      </div>
 
       <div class="platform-row">
         <div class="platform-field field">
@@ -317,7 +443,7 @@
 
     <!-- ── SECTION 3: Custom Fields ── -->
     <div class="section">
-      <div class="section-title">✨ ข้อมูลเพิ่มเติม <span style="font-weight:400;text-transform:none;">(ไม่บังคับ)</span></div>
+      <div class="section-title"><span class="teal-dot"></span> ข้อมูลเพิ่มเติม <span style="font-weight:400;text-transform:none;color:var(--text-gray);font-size:11px;">(ไม่บังคับ)</span></div>
 
       <div class="field">
         <label>🐾 ชนิดสัตว์เลี้ยง</label>
@@ -373,24 +499,26 @@
 
     <!-- Submit -->
     <button class="btn-submit" id="btnSubmit" onclick="submitForm()">
-      ✅ สมัครสมาชิก Hosttail
+      🐾 สมัครสมาชิก Hosttail
     </button>
 
-    <p style="text-align:center; font-size:11px; color:#9ca3af; margin-top:14px;">
-      ข้อมูลของคุณจะถูกเก็บเป็นความลับ และใช้เพื่อบริการลูกค้าเท่านั้น
+    <p class="footer-note">
+      ข้อมูลของคุณจะถูกเก็บเป็นความลับ<br>
+      และใช้เพื่อให้บริการลูกค้าเท่านั้น
     </p>
   </div>
 
   <!-- ── SUCCESS SCREEN ── -->
   <div class="success-screen" id="successScreen">
-    <div class="success-icon">🎉</div>
+    <div class="success-icon-circle">🐾</div>
     <div class="success-title">สมัครสมาชิกสำเร็จ!</div>
     <p class="success-sub">
-      ยินดีต้อนรับสู่ครอบครัว Hosttail 🐾<br>
+      ยินดีต้อนรับสู่ครอบครัว Hosttail 🎉<br>
       คุณจะได้รับสิทธิพิเศษสมาชิก<br>
       และข่าวสารโปรโมชั่นก่อนใคร
     </p>
-    <p style="margin-top:20px; font-size:13px; color:#9ca3af;">
+    <div class="success-teal-bar">✅ บันทึกข้อมูลแล้ว</div>
+    <p style="margin-top:20px; font-size:13px; color:#b09878;">
       ปิดหน้านี้แล้วกลับไปสนทนาใน LINE ได้เลย
     </p>
   </div>
@@ -402,14 +530,13 @@
   // ⚙️ CONFIG — แก้ไขค่านี้เท่านั้น
   // ════════════════════════════════════════════
   const CONFIG = {
-    LIFF_ID:  "1660779377-E6wTfMBC",    // Hosttail Crm LIFF
+    LIFF_ID:  "1660779377-E6wTfMBC",
     GAS_URL:  "https://script.google.com/macros/s/AKfycbyDXHef0Zlq5K8Gi8QIxG4TcVN9Jr4Ajcl-wkrKweo0NvB-Q13wF7BhTZ4AeGepIUdApA/exec",
   };
   // ════════════════════════════════════════════
 
   let lineProfile = null;
 
-  // ── INIT ──
   window.addEventListener("DOMContentLoaded", async () => {
     try {
       await liff.init({ liffId: CONFIG.LIFF_ID });
@@ -421,7 +548,6 @@
 
       lineProfile = await liff.getProfile();
 
-      // Fill UI
       document.getElementById("userUid").textContent    = lineProfile.userId;
       document.getElementById("userName").textContent   = lineProfile.displayName;
       document.getElementById("displayUid").value       = lineProfile.userId;
@@ -430,7 +556,6 @@
       document.getElementById("lineName").value         = lineProfile.displayName;
       document.getElementById("linePicture").value      = lineProfile.pictureUrl || "";
 
-      // Avatar
       if (lineProfile.pictureUrl) {
         const img = document.createElement("img");
         img.src = lineProfile.pictureUrl;
@@ -439,7 +564,6 @@
         av.appendChild(img);
       }
 
-      // Check if already registered
       await checkExisting(lineProfile.userId);
 
       document.getElementById("loadingScreen").style.display = "none";
@@ -451,7 +575,6 @@
     }
   });
 
-  // ── CHECK EXISTING MEMBER ──
   async function checkExisting(uid) {
     try {
       const res = await fetch(`${CONFIG.GAS_URL}?action=check&uid=${uid}`);
@@ -463,10 +586,9 @@
         badge.textContent = "⚡ คุณเป็นสมาชิกอยู่แล้ว — อัปเดตข้อมูลได้เลย";
         form.insertBefore(badge, form.firstChild);
 
-        // Pre-fill existing data
         if (data.data) {
-          document.getElementById("phone").value        = data.data.phone       || "";
-          document.getElementById("fullName").value     = data.data.full_name   || "";
+          document.getElementById("phone").value        = data.data.phone        || "";
+          document.getElementById("fullName").value     = data.data.full_name    || "";
           document.getElementById("orderShopee").value  = data.data.order_shopee || "";
           document.getElementById("orderLazada").value  = data.data.order_lazada || "";
           document.getElementById("orderTiktok").value  = data.data.order_tiktok || "";
@@ -478,33 +600,24 @@
 
         document.getElementById("btnSubmit").textContent = "✏️ อัปเดตข้อมูล";
       }
-    } catch(e) {
-      // ถ้า check ไม่ได้ก็ข้ามไปได้เลย
-    }
+    } catch(e) { /* ข้ามถ้า check ไม่ได้ */ }
   }
 
-  // ── SUBMIT ──
   async function submitForm() {
     const phone = document.getElementById("phone").value.trim();
-    if (!phone) {
-      showError("กรุณากรอกเบอร์โทรศัพท์");
-      return;
-    }
-    if (!/^[0-9\-\+\s]{9,15}$/.test(phone)) {
-      showError("รูปแบบเบอร์โทรไม่ถูกต้อง");
-      return;
-    }
+    if (!phone) { showError("กรุณากรอกเบอร์โทรศัพท์"); return; }
+    if (!/^[0-9\-\+\s]{9,15}$/.test(phone)) { showError("รูปแบบเบอร์โทรไม่ถูกต้อง"); return; }
 
     hideError();
     const btn = document.getElementById("btnSubmit");
     btn.disabled = true;
-    btn.innerHTML = `<div style="width:18px;height:18px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin 0.7s linear infinite;"></div> กำลังบันทึก...`;
+    btn.innerHTML = `<div style="width:18px;height:18px;border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;"></div>&nbsp;กำลังบันทึก...`;
 
     const payload = {
       line_uid:     document.getElementById("lineUid").value,
       line_name:    document.getElementById("lineName").value,
       line_picture: document.getElementById("linePicture").value,
-      phone:        phone,
+      phone,
       full_name:    document.getElementById("fullName").value.trim(),
       order_shopee: document.getElementById("orderShopee").value.trim(),
       order_lazada: document.getElementById("orderLazada").value.trim(),
@@ -525,11 +638,9 @@
       const data = await res.json();
 
       if (data.status === "ok") {
-        document.querySelector(".header").style.display   = "none";
+        document.querySelector(".header").style.display    = "none";
         document.querySelector(".form-body").style.display = "none";
         document.getElementById("successScreen").style.display = "block";
-
-        // ปิด LIFF หลัง 3 วินาที
         setTimeout(() => { if (liff.isInClient()) liff.closeWindow(); }, 3000);
       } else {
         throw new Error(data.message || "เกิดข้อผิดพลาด");
@@ -537,7 +648,7 @@
     } catch (err) {
       showError(`ไม่สามารถบันทึกได้: ${err.message}`);
       btn.disabled = false;
-      btn.innerHTML = "✅ สมัครสมาชิก Hosttail";
+      btn.innerHTML = "🐾 สมัครสมาชิก Hosttail";
     }
   }
 
