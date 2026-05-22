@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Hosttail — สมัครสมาชิก</title>
+
+  <!-- LINE LIFF SDK -->
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+
+  <style>
+    :root {
+      --brand-dark: #1a1a2e;
+      --brand-mid:  #16213e;
+      --brand-accent: #06d6a0;
+      --brand-light: #f8f9fa;
+      --text-main:  #1f2937;
+      --text-gray:  #6b7280;
+      --border:     #e5e7eb;
+      --radius:     12px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--brand-light);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding-bottom: 40px;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: linear-gradient(135deg, var(--brand-dark) 0%, var(--brand-mid) 100%);
+      padding: 32px 24px 24px;
+      text-align: center;
+      color: #fff;
+    }
+    .header-logo { font-size: 48px; margin-bottom: 8px; }
+    .header-brand { font-size: 24px; font-weight: 800; letter-spacing: 2px; }
+    .header-sub { font-size: 13px; opacity: 0.65; margin-top: 4px; }
+
+    /* User Card (auto-filled) */
+    .user-card {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      margin: 16px 0 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-align: left;
+    }
+    .user-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      flex-shrink: 0;
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+    }
+    .user-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .user-name { font-size: 15px; font-weight: 600; }
+    .user-uid  { font-size: 10px; opacity: 0.55; font-family: monospace; word-break: break-all; }
+    .user-badge {
+      margin-left: auto;
+      background: var(--brand-accent);
+      color: var(--brand-dark);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 20px;
+      flex-shrink: 0;
+    }
+
+    /* ── FORM BODY ── */
+    .form-body {
+      padding: 20px 16px;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .section {
+      background: #fff;
+      border-radius: var(--radius);
+      border: 1.5px solid var(--border);
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--text-gray);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .field { margin-bottom: 12px; }
+    .field:last-child { margin-bottom: 0; }
+
+    label {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 5px;
+    }
+    label .req { color: #ef4444; margin-left: 2px; }
+    label .opt { color: var(--text-gray); font-weight: 400; font-size: 11px; }
+
+    input[type="text"],
+    input[type="tel"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+      color: var(--text-main);
+      background: #fafafa;
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--brand-dark);
+      background: #fff;
+    }
+    input.auto-filled {
+      background: #f0fdf4;
+      border-color: #86efac;
+      color: #166534;
+      font-family: monospace;
+      font-size: 12px;
+    }
+    textarea { resize: vertical; min-height: 80px; }
+
+    .platform-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .platform-field label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* ── SUBMIT ── */
+    .btn-submit {
+      width: 100%;
+      padding: 16px;
+      background: var(--brand-dark);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: opacity 0.2s;
+      margin-top: 4px;
+    }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-submit:not(:disabled):active { opacity: 0.85; }
+
+    /* ── SUCCESS ── */
+    .success-screen {
+      display: none;
+      text-align: center;
+      padding: 60px 24px;
+    }
+    .success-icon { font-size: 64px; margin-bottom: 16px; }
+    .success-title { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+    .success-sub { font-size: 14px; color: var(--text-gray); line-height: 1.6; }
+
+    /* ── LOADING ── */
+    .loading-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      gap: 16px;
+    }
+    .spinner {
+      width: 40px; height: 40px;
+      border: 3px solid #e5e7eb;
+      border-top-color: var(--brand-dark);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .error-msg {
+      background: #fef2f2;
+      border: 1.5px solid #fecaca;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 13px;
+      color: #dc2626;
+      margin-bottom: 14px;
+      display: none;
+    }
+    .error-msg.show { display: block; }
+
+    /* Already registered */
+    .already-badge {
+      display: inline-block;
+      background: #fef3c7;
+      color: #92400e;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── LOADING ── -->
+<div class="loading-screen" id="loadingScreen">
+  <div class="spinner"></div>
+  <p style="font-size:14px;color:#6b7280;">กำลังโหลด...</p>
+</div>
+
+<!-- ── MAIN FORM ── -->
+<div id="mainContent" style="display:none;">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-logo">🐾</div>
+    <div class="header-brand">HOSTTAIL</div>
+    <div class="header-sub">สมัครสมาชิก • Member Registration</div>
+
+    <div class="user-card" id="userCard">
+      <div class="user-avatar" id="userAvatar">👤</div>
+      <div>
+        <div class="user-name" id="userName">กำลังโหลด...</div>
+        <div class="user-uid"  id="userUid">—</div>
+      </div>
+      <div class="user-badge">LINE ✓</div>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <div class="form-body">
+
+    <div class="error-msg" id="errorMsg"></div>
+
+    <!-- Hidden fields -->
+    <input type="hidden" id="lineUid" />
+    <input type="hidden" id="lineName" />
+    <input type="hidden" id="linePicture" />
+
+    <!-- ── SECTION 1: ข้อมูลส่วนตัว ── -->
+    <div class="section">
+      <div class="section-title">📱 ข้อมูลส่วนตัว</div>
+
+      <div class="field">
+        <label>LINE User ID <span class="opt">(อัตโนมัติ)</span></label>
+        <input type="text" id="displayUid" class="auto-filled" readonly placeholder="กำลังดึงข้อมูล..." />
+      </div>
+
+      <div class="field">
+        <label>LINE Display Name <span class="opt">(อัตโนมัติ)</span></label>
+        <input type="text" id="displayName" class="auto-filled" readonly placeholder="กำลังดึงข้อมูล..." />
+      </div>
+
+      <div class="field">
+        <label>เบอร์โทรศัพท์ <span class="req">*</span></label>
+        <input type="tel" id="phone" placeholder="เช่น 081-234-5678" maxlength="20" />
+      </div>
+
+      <div class="field">
+        <label>ชื่อ-นามสกุล <span class="opt">(ไม่บังคับ)</span></label>
+        <input type="text" id="fullName" placeholder="ชื่อจริงเพื่อใช้รับสินค้า" />
+      </div>
+    </div>
+
+    <!-- ── SECTION 2: Order IDs ── -->
+    <div class="section">
+      <div class="section-title">🛒 เลขที่คำสั่งซื้อ <span style="font-weight:400;text-transform:none;">(ไม่บังคับ)</span></div>
+
+      <div class="platform-row">
+        <div class="platform-field field">
+          <label>🟠 Shopee Order ID</label>
+          <input type="text" id="orderShopee" placeholder="240500XXXXXXX" />
+        </div>
+        <div class="platform-field field">
+          <label>🔵 Lazada Order ID</label>
+          <input type="text" id="orderLazada" placeholder="123456789012" />
+        </div>
+        <div class="platform-field field">
+          <label>⚫ TikTok Order ID</label>
+          <input type="text" id="orderTiktok" placeholder="TOxxxxxxxxxx" />
+        </div>
+        <div class="platform-field field">
+          <label>🏪 เลขที่บิล POS</label>
+          <input type="text" id="orderPos" placeholder="POS-2026-XXXX" />
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SECTION 3: Custom Fields ── -->
+    <div class="section">
+      <div class="section-title">✨ ข้อมูลเพิ่มเติม <span style="font-weight:400;text-transform:none;">(ไม่บังคับ)</span></div>
+
+      <div class="field">
+        <label>🐾 ชนิดสัตว์เลี้ยง</label>
+        <select id="petType">
+          <option value="">— เลือก —</option>
+          <option>สุนัข</option>
+          <option>แมว</option>
+          <option>กระต่าย</option>
+          <option>นก</option>
+          <option>สัตว์เลื้อยคลาน</option>
+          <option>อื่นๆ</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>📍 จังหวัด</label>
+        <select id="province">
+          <option value="">— เลือก —</option>
+          <option>กรุงเทพมหานคร</option><option>กระบี่</option><option>กาญจนบุรี</option>
+          <option>กาฬสินธุ์</option><option>กำแพงเพชร</option><option>ขอนแก่น</option>
+          <option>จันทบุรี</option><option>ฉะเชิงเทรา</option><option>ชลบุรี</option>
+          <option>ชัยนาท</option><option>ชัยภูมิ</option><option>ชุมพร</option>
+          <option>เชียงราย</option><option>เชียงใหม่</option><option>ตรัง</option>
+          <option>ตราด</option><option>ตาก</option><option>นครนายก</option>
+          <option>นครปฐม</option><option>นครพนม</option><option>นครราชสีมา</option>
+          <option>นครศรีธรรมราช</option><option>นครสวรรค์</option><option>นนทบุรี</option>
+          <option>นราธิวาส</option><option>น่าน</option><option>บึงกาฬ</option>
+          <option>บุรีรัมย์</option><option>ปทุมธานี</option><option>ประจวบคีรีขันธ์</option>
+          <option>ปราจีนบุรี</option><option>ปัตตานี</option><option>พระนครศรีอยุธยา</option>
+          <option>พะเยา</option><option>พังงา</option><option>พัทลุง</option>
+          <option>พิจิตร</option><option>พิษณุโลก</option><option>เพชรบุรี</option>
+          <option>เพชรบูรณ์</option><option>แพร่</option><option>ภูเก็ต</option>
+          <option>มหาสารคาม</option><option>มุกดาหาร</option><option>แม่ฮ่องสอน</option>
+          <option>ยโสธร</option><option>ยะลา</option><option>ร้อยเอ็ด</option>
+          <option>ระนอง</option><option>ระยอง</option><option>ราชบุรี</option>
+          <option>ลพบุรี</option><option>ลำปาง</option><option>ลำพูน</option>
+          <option>เลย</option><option>ศรีสะเกษ</option><option>สกลนคร</option>
+          <option>สงขลา</option><option>สตูล</option><option>สมุทรปราการ</option>
+          <option>สมุทรสงคราม</option><option>สมุทรสาคร</option><option>สระแก้ว</option>
+          <option>สระบุรี</option><option>สิงห์บุรี</option><option>สุโขทัย</option>
+          <option>สุพรรณบุรี</option><option>สุราษฎร์ธานี</option><option>สุรินทร์</option>
+          <option>หนองคาย</option><option>หนองบัวลำภู</option><option>อ่างทอง</option>
+          <option>อำนาจเจริญ</option><option>อุดรธานี</option><option>อุตรดิตถ์</option>
+          <option>อุทัยธานี</option><option>อุบลราชธานี</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>💬 หมายเหตุ / ข้อความถึงร้าน <span class="opt">(ไม่บังคับ)</span></label>
+        <textarea id="note" placeholder="เช่น สนใจสินค้าตัวไหน, ต้องการข้อมูลเพิ่มเติม..."></textarea>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <button class="btn-submit" id="btnSubmit" onclick="submitForm()">
+      ✅ สมัครสมาชิก Hosttail
+    </button>
+
+    <p style="text-align:center; font-size:11px; color:#9ca3af; margin-top:14px;">
+      ข้อมูลของคุณจะถูกเก็บเป็นความลับ และใช้เพื่อบริการลูกค้าเท่านั้น
+    </p>
+  </div>
+
+  <!-- ── SUCCESS SCREEN ── -->
+  <div class="success-screen" id="successScreen">
+    <div class="success-icon">🎉</div>
+    <div class="success-title">สมัครสมาชิกสำเร็จ!</div>
+    <p class="success-sub">
+      ยินดีต้อนรับสู่ครอบครัว Hosttail 🐾<br>
+      คุณจะได้รับสิทธิพิเศษสมาชิก<br>
+      และข่าวสารโปรโมชั่นก่อนใคร
+    </p>
+    <p style="margin-top:20px; font-size:13px; color:#9ca3af;">
+      ปิดหน้านี้แล้วกลับไปสนทนาใน LINE ได้เลย
+    </p>
+  </div>
+
+</div><!-- end mainContent -->
+
+<script>
+  // ════════════════════════════════════════════
+  // ⚙️ CONFIG — แก้ไขค่านี้เท่านั้น
+  // ════════════════════════════════════════════
+  const CONFIG = {
+    LIFF_ID:  "1660779377-E6wTfMBC",    // Hosttail Crm LIFF
+    GAS_URL:  "https://script.google.com/macros/s/AKfycbyDXHef0Zlq5K8Gi8QIxG4TcVN9Jr4Ajcl-wkrKweo0NvB-Q13wF7BhTZ4AeGepIUdApA/exec",
+  };
+  // ════════════════════════════════════════════
+
+  let lineProfile = null;
+
+  // ── INIT ──
+  window.addEventListener("DOMContentLoaded", async () => {
+    try {
+      await liff.init({ liffId: CONFIG.LIFF_ID });
+
+      if (!liff.isLoggedIn()) {
+        liff.login();
+        return;
+      }
+
+      lineProfile = await liff.getProfile();
+
+      // Fill UI
+      document.getElementById("userUid").textContent    = lineProfile.userId;
+      document.getElementById("userName").textContent   = lineProfile.displayName;
+      document.getElementById("displayUid").value       = lineProfile.userId;
+      document.getElementById("displayName").value      = lineProfile.displayName;
+      document.getElementById("lineUid").value          = lineProfile.userId;
+      document.getElementById("lineName").value         = lineProfile.displayName;
+      document.getElementById("linePicture").value      = lineProfile.pictureUrl || "";
+
+      // Avatar
+      if (lineProfile.pictureUrl) {
+        const img = document.createElement("img");
+        img.src = lineProfile.pictureUrl;
+        const av = document.getElementById("userAvatar");
+        av.innerHTML = "";
+        av.appendChild(img);
+      }
+
+      // Check if already registered
+      await checkExisting(lineProfile.userId);
+
+      document.getElementById("loadingScreen").style.display = "none";
+      document.getElementById("mainContent").style.display   = "block";
+
+    } catch (err) {
+      document.getElementById("loadingScreen").innerHTML =
+        `<p style="color:#dc2626;padding:24px;text-align:center;">เกิดข้อผิดพลาด: ${err.message}</p>`;
+    }
+  });
+
+  // ── CHECK EXISTING MEMBER ──
+  async function checkExisting(uid) {
+    try {
+      const res = await fetch(`${CONFIG.GAS_URL}?action=check&uid=${uid}`);
+      const data = await res.json();
+      if (data.exists) {
+        const form = document.querySelector(".form-body");
+        const badge = document.createElement("div");
+        badge.className = "already-badge";
+        badge.textContent = "⚡ คุณเป็นสมาชิกอยู่แล้ว — อัปเดตข้อมูลได้เลย";
+        form.insertBefore(badge, form.firstChild);
+
+        // Pre-fill existing data
+        if (data.data) {
+          document.getElementById("phone").value        = data.data.phone       || "";
+          document.getElementById("fullName").value     = data.data.full_name   || "";
+          document.getElementById("orderShopee").value  = data.data.order_shopee || "";
+          document.getElementById("orderLazada").value  = data.data.order_lazada || "";
+          document.getElementById("orderTiktok").value  = data.data.order_tiktok || "";
+          document.getElementById("orderPos").value     = data.data.order_pos    || "";
+          document.getElementById("petType").value      = data.data.pet_type     || "";
+          document.getElementById("province").value     = data.data.province     || "";
+          document.getElementById("note").value         = data.data.note         || "";
+        }
+
+        document.getElementById("btnSubmit").textContent = "✏️ อัปเดตข้อมูล";
+      }
+    } catch(e) {
+      // ถ้า check ไม่ได้ก็ข้ามไปได้เลย
+    }
+  }
+
+  // ── SUBMIT ──
+  async function submitForm() {
+    const phone = document.getElementById("phone").value.trim();
+    if (!phone) {
+      showError("กรุณากรอกเบอร์โทรศัพท์");
+      return;
+    }
+    if (!/^[0-9\-\+\s]{9,15}$/.test(phone)) {
+      showError("รูปแบบเบอร์โทรไม่ถูกต้อง");
+      return;
+    }
+
+    hideError();
+    const btn = document.getElementById("btnSubmit");
+    btn.disabled = true;
+    btn.innerHTML = `<div style="width:18px;height:18px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin 0.7s linear infinite;"></div> กำลังบันทึก...`;
+
+    const payload = {
+      line_uid:     document.getElementById("lineUid").value,
+      line_name:    document.getElementById("lineName").value,
+      line_picture: document.getElementById("linePicture").value,
+      phone:        phone,
+      full_name:    document.getElementById("fullName").value.trim(),
+      order_shopee: document.getElementById("orderShopee").value.trim(),
+      order_lazada: document.getElementById("orderLazada").value.trim(),
+      order_tiktok: document.getElementById("orderTiktok").value.trim(),
+      order_pos:    document.getElementById("orderPos").value.trim(),
+      pet_type:     document.getElementById("petType").value,
+      province:     document.getElementById("province").value,
+      note:         document.getElementById("note").value.trim(),
+      timestamp:    new Date().toISOString(),
+    };
+
+    try {
+      const res = await fetch(CONFIG.GAS_URL, {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify(payload),
+      });
+      const data = await res.json();
+
+      if (data.status === "ok") {
+        document.querySelector(".header").style.display   = "none";
+        document.querySelector(".form-body").style.display = "none";
+        document.getElementById("successScreen").style.display = "block";
+
+        // ปิด LIFF หลัง 3 วินาที
+        setTimeout(() => { if (liff.isInClient()) liff.closeWindow(); }, 3000);
+      } else {
+        throw new Error(data.message || "เกิดข้อผิดพลาด");
+      }
+    } catch (err) {
+      showError(`ไม่สามารถบันทึกได้: ${err.message}`);
+      btn.disabled = false;
+      btn.innerHTML = "✅ สมัครสมาชิก Hosttail";
+    }
+  }
+
+  function showError(msg) {
+    const el = document.getElementById("errorMsg");
+    el.textContent = "⚠️ " + msg;
+    el.classList.add("show");
+    el.scrollIntoView({ behavior: "smooth" });
+  }
+  function hideError() {
+    document.getElementById("errorMsg").classList.remove("show");
+  }
+</script>
+</body>
+</html>
